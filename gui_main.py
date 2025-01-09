@@ -23,8 +23,15 @@ class PWApp(ctk.CTk):
         self.entry_pc.pack(pady=5)
         self.entry_pc.bind("<Return>", lambda event: self.add_data_point())
 
-        self.button_add = ctk.CTkButton(self.frame_left, text="新增資料點", command=self.add_data_point)
-        self.button_add.pack(pady=5)
+        # 建立按鈕框架來水平排列按鈕
+        button_frame = ctk.CTkFrame(self.frame_left)
+        button_frame.pack(pady=5)
+
+        self.button_add = ctk.CTkButton(button_frame, text="新增資料點", command=self.add_data_point)
+        self.button_add.pack(side="left", padx=5)
+
+        self.button_clear = ctk.CTkButton(button_frame, text="清除資料", command=self.clear_data)
+        self.button_clear.pack(side="left", padx=5)
 
         self.label_data_points = ctk.CTkLabel(self.frame_left, text="目前資料點：")
         self.label_data_points.pack(pady=10)
@@ -48,6 +55,17 @@ class PWApp(ctk.CTk):
 
         self.text_result = ctk.CTkTextbox(self.frame_right, height=150)
         self.text_result.pack(pady=5, fill="both", expand=True)
+
+    def clear_data(self):
+        # 清除所有儲存的資料點
+        self.data_points = []
+        # 清除資料點顯示區域
+        self.text_data_points.delete("1.0", ctk.END)
+        # 清除結果顯示區域
+        self.text_result.delete("1.0", ctk.END)
+        # 清除輸入框
+        self.entry_pc.delete(0, ctk.END)
+        self.entry_h.delete(0, ctk.END)
 
     def add_data_point(self):
         lines = self.entry_pc.get().strip().split('\n')
@@ -88,7 +106,7 @@ class PWApp(ctk.CTk):
 
         self.text_result.insert(ctk.END, "\n分段積分詳情\n")
         for i, seg in enumerate(result.segment_details, 1):
-            self.text_result.insert(ctk.END, f"段{i}: 壓力 {seg['p1']:.2f}, {seg['p2']:.2f},"
+            self.text_result.insert(ctk.END, f"段 {i}: 壓力 {seg['p1']:.2f}, {seg['p2']:.2f},"
                                              f" 比濕度 {seg['H_s1']:.3f}, {seg['H_s2']:.3f},"
                                              f" 平均比濕度 {seg['mean_H_s'] if 'mean_H_s' in seg else (seg['H_s1']+seg['H_s2'])/2.0:.3f},"
                                              f" 壓力差 {seg['Δp']:.2f}, 面積 {seg['area']:.3f}\n")
