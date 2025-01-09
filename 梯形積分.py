@@ -1,3 +1,5 @@
+from 內插法 import interpolate_point
+
 def integrate_Hs_over_p(data_points, h1, h2):
     """
     利用梯形公式，對在 [h1, h2] 區間的 (p, H_s) 做數值積分。
