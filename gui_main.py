@@ -47,7 +47,7 @@ class PWApp(ctk.CTk):
         self.frame_right.pack(side="right", fill="both", expand=True, padx=10, pady=10)
 
         self.text_result = ctk.CTkTextbox(self.frame_right, height=150)
-        self.text_result.pack(pady=5)
+        self.text_result.pack(pady=5, fill="both", expand=True)
 
     def add_data_point(self):
         line = self.entry_pc.get().strip()
@@ -80,6 +80,7 @@ class PWApp(ctk.CTk):
         input_data = PWInput(data_points=self.data_points, h1=h1_val, h2=h2_val)
         result = compute_precipitable_water(input_data)
 
+        self.text_result.delete("1.0", ctk.END)  # 清空之前的結果
         self.text_result.insert(ctk.END, "\n===== 每筆 (p, c) 對應 '水氣壓(e)' 與 '比濕度(H_s)' =====\n")
         for (p_i, c_i, e_i, hs_i) in result.data_details:
             self.text_result.insert(ctk.END, f"  壓力 p={p_i:7.2f} hPa,  溫度 c={c_i:6.2f} °C,  水氣壓 e={e_i:7.3f} hPa,  比濕度 H_s={hs_i:7.3f} g/kg\n")
