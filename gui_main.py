@@ -50,18 +50,19 @@ class PWApp(ctk.CTk):
         self.text_result.pack(pady=5, fill="both", expand=True)
 
     def add_data_point(self):
-        line = self.entry_pc.get().strip()
-        if not line:
-            return
-        try:
-            p_str, c_str = line.split()
-            p_val = float(p_str)
-            c_val = float(c_str)
-            self.data_points.append((p_val, c_val))
-            self.text_data_points.insert(ctk.END, f"p={p_val}, c={c_val}\n")
-            self.entry_pc.delete(0, ctk.END)
-        except:
-            self.text_data_points.insert(ctk.END, "[警告] 格式錯誤，請再試一次。\n")
+        lines = self.entry_pc.get().strip().split('\n')
+        for line in lines:
+            if not line:
+                continue
+            try:
+                p_str, c_str = line.split()
+                p_val = float(p_str)
+                c_val = float(c_str)
+                self.data_points.append((p_val, c_val))
+                self.text_data_points.insert(ctk.END, f"p={p_val}, c={c_val}\n")
+            except:
+                self.text_data_points.insert(ctk.END, "[警告] 格式錯誤，請再試一次。\n")
+        self.entry_pc.delete(0, ctk.END)
 
     def calculate(self):
         if len(self.data_points) < 2:
@@ -81,21 +82,21 @@ class PWApp(ctk.CTk):
         result = compute_precipitable_water(input_data)
 
         self.text_result.delete("1.0", ctk.END)  # 清空之前的結果
-        self.text_result.insert(ctk.END, "\n===== 每筆 (p, c) 對應 '水氣壓(e)' 與 '比濕度(H_s)' =====\n")
+        self.text_result.insert(ctk.END, "\n每筆 (p, c) 對應 '水氣壓(e)' 與 '比濕度(H_s)'\n")
         for (p_i, c_i, e_i, hs_i) in result.data_details:
-            self.text_result.insert(ctk.END, f"  壓力 p={p_i:7.2f} hPa,  溫度 c={c_i:6.2f} °C,  水氣壓 e={e_i:7.3f} hPa,  比濕度 H_s={hs_i:7.3f} g/kg\n")
+            self.text_result.insert(ctk.END, f"壓力 {p_i:7.2f} hPa, 溫度 {c_i:6.2f} °C, 水氣壓 {e_i:7.3f} hPa, 比濕度 {hs_i:7.3f} g/kg\n")
 
-        self.text_result.insert(ctk.END, "\n===== 分段積分詳情 =====\n")
+        self.text_result.insert(ctk.END, "\n分段積分詳情\n")
         for i, seg in enumerate(result.segment_details, 1):
-            self.text_result.insert(ctk.END, f"  段{i}:  壓力 p1={seg['p1']:.2f}, p2={seg['p2']:.2f},"
-                                             f" 比濕度 H_s1={seg['H_s1']:.3f}, H_s2={seg['H_s2']:.3f},"
-                                             f" 平均比濕度 mean_H_s={seg['mean_H_s'] if 'mean_H_s' in seg else (seg['H_s1']+seg['H_s2'])/2.0:.3f},"
-                                             f" 壓力差 Δp={seg['Δp']:.2f}, 面積 area={seg['area']:.3f}\n")
+            self.text_result.insert(ctk.END, f"段{i}: 壓力 {seg['p1']:.2f}, {seg['p2']:.2f},"
+                                             f" 比濕度 {seg['H_s1']:.3f}, {seg['H_s2']:.3f},"
+                                             f" 平均比濕度 {seg['mean_H_s'] if 'mean_H_s' in seg else (seg['H_s1']+seg['H_s2'])/2.0:.3f},"
+                                             f" 壓力差 {seg['Δp']:.2f}, 面積 {seg['area']:.3f}\n")
 
-        self.text_result.insert(ctk.END, "\n===== 最終結果 =====\n")
-        self.text_result.insert(ctk.END, f"  在壓力 {h1_val:.2f} hPa 與 {h2_val:.2f} hPa 之間，\n")
-        self.text_result.insert(ctk.END, f"  總積分 total_integral = {result.total_integral:.4f} (H_s×hPa)\n")
-        self.text_result.insert(ctk.END, f"  可降水量 W_p = {result.W_p:.4f} mm\n")
+        self.text_result.insert(ctk.END, "\n最終結果\n")
+        self.text_result.insert(ctk.END, f"在壓力 {h1_val:.2f} hPa 與 {h2_val:.2f} hPa 之間，\n")
+        self.text_result.insert(ctk.END, f"總積分 {result.total_integral:.4f} (H_s×hPa)\n")
+        self.text_result.insert(ctk.END, f"可降水量 {result.W_p:.4f} mm\n")
         self.text_result.insert(ctk.END, "=================================\n")
 
 if __name__ == "__main__":
