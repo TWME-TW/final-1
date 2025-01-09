@@ -35,10 +35,10 @@ def main():
     # 顯示結果
     print("\n計算結果:")
     for i, (p, c, e, H) in enumerate(zip(pressures, temperatures, vapor_pressures, specific_humidity), start=1):
-        print(f"點{i}: 壓力={p}hPa, 溫度={c}°C, 蒸氣壓={e:.2f}hPa, 比濕度={H:.2f}g/kg")
+        print(f"點{i}: 壓力={p}mb, 溫度={c}°C, 蒸氣壓={e:.2f}mb, 比濕度={H:.2f}g/kg")
     
     for i, (p_diff, H_avg) in enumerate(zip(pressure_differences, average_specific_humidity), start=1):
-        print(f"壓力差{i}={p_diff}hPa, 平均比濕度{i}={H_avg:.2f}g/kg")
+        print(f"壓力差{i}={p_diff}mb, 平均比濕度{i}={H_avg:.2f}g/kg")
     
     print(f"\n可降水量 W_p={precipitable_water:.2f} mm")
 
