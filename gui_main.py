@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from pw_module import PWInput, compute_precipitable_water
+from 主要計算程式 import PWInput, compute_precipitable_water
 
 class PWApp(ctk.CTk):
     def __init__(self):

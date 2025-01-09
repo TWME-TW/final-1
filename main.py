@@ -13,9 +13,8 @@ main.py
     - 同目錄下需有 pw_module.py
     - 在終端機 (command line) 中執行：  python main.py
 """
-
-from pw_module import (
-    PWInput,
+from 封裝過後的資料格式 import PWInput
+from 主要計算程式 import (
     compute_precipitable_water
 )
 
