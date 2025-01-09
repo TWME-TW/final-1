@@ -17,6 +17,7 @@ class PWApp(ctk.CTk):
 
         self.entry_pc = ctk.CTkEntry(self, placeholder_text="p, c")
         self.entry_pc.pack(pady=5)
+        self.entry_pc.bind("<Return>", lambda event: self.add_data_point())
 
         self.button_add = ctk.CTkButton(self, text="新增資料點", command=self.add_data_point)
         self.button_add.pack(pady=5)
@@ -32,6 +33,7 @@ class PWApp(ctk.CTk):
 
         self.entry_h = ctk.CTkEntry(self, placeholder_text="h1, h2")
         self.entry_h.pack(pady=5)
+        self.entry_h.bind("<Return>", lambda event: self.calculate())
 
         self.button_calculate = ctk.CTkButton(self, text="計算", command=self.calculate)
         self.button_calculate.pack(pady=10)
